@@ -18,7 +18,7 @@ public class ServerMain {
                 OutputStream outputStream = clientSocket.getOutputStream();
                 for (int i = 0; i< 10; i++) {
                     outputStream.write(("Time is now " + new Date() + "\n").getBytes());
-                    Thread.sleep(1000);
+                    Thread.sleep(10000);
                 }
                 outputStream.write("Hello World\n Coleby K here\n".getBytes());
                 clientSocket.close();
