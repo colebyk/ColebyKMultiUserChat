@@ -1,10 +1,8 @@
 package com.muc;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 
 public class ServerMain {
     public static void main(String[] args) {
@@ -16,6 +14,19 @@ public class ServerMain {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Accepted connection from " + clientSocket);
                 ServerWorker worker = new ServerWorker(clientSocket);
+                Thread t = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            worker.handleClientSocket(clientSocket);
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
                 worker.start();
             }
         } catch (IOException e) {
