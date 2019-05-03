@@ -17,5 +17,5 @@ User & Server
 
 Commands:
 
-    login
+    login <user> <password>
     logoff
