@@ -42,10 +42,11 @@ public class ServerWorker extends Thread {
                 downloaded apache module from apache website, implemented the commons-lang3-3.9.jar as a dependency
                 in  File -> Project Structure -> Modules -> Dependencies
             */
-            String[] tokens = StringUtils.split(line); // split at spaces in string
+            String[] tokens = StringUtils.split(line); // split at spaces in string and puts each word into tokens array
             if (tokens != null && tokens.length > 0) {
-                String cmd = tokens[0];
-                if ("quit".equalsIgnoreCase(line)) { // equalsIgnoreCase ignores casing--could be "QUIT", "qUiT", etc
+                String cmd = tokens[0]; // first word in tokens array is the command
+                if ("logoff".equalsIgnoreCase(cmd) || "quit".equalsIgnoreCase(line)) { // equalsIgnoreCase ignores casing--could be "QUIT", "qUiT", etc
+                    handleLogoff();
                     break;
                 }else if ("login".equalsIgnoreCase(cmd)) {
                     handleLogin(outputStream, tokens);
@@ -63,6 +64,21 @@ public class ServerWorker extends Thread {
         return login;
     }
 
+    private void handleLogoff() throws IOException {
+
+        List<ServerWorker> workerList = server.getWorkerList();
+
+        // send other online users current user's status
+        String onlineMsg = null;
+        for (ServerWorker worker : workerList) { // for each instance of worker in the workerList arraylist (everyone connected)
+            if (!login.equals(worker.getLogin())) { // if the user in workerList is the login just used, don't send the message
+                onlineMsg = "\n" + login + " is now offline" + "\n";
+                worker.send(onlineMsg);
+            }
+        }
+        clientSocket.close();
+    }
+
     private void handleLogin(OutputStream outputStream, String[] tokens) throws IOException {
         String msg;
         if (tokens.length == 3) {
@@ -76,11 +92,25 @@ public class ServerWorker extends Thread {
                 this.login = login; // sets class login string to handleLogin's login value
                 System.out.println("User logged in successfully: " + login);
 
-                String onlineMsg = login + " is now online" + "\n";
-
                 List<ServerWorker> workerList = server.getWorkerList();
-                for (ServerWorker worker : workerList) {
-                    worker.send(onlineMsg);
+
+                // send current user all other online people
+                for (ServerWorker worker : workerList) { // for each instance of worker in the workerList arraylist (everyone connected)
+                    if (worker.getLogin() != null) { // if one of the users connected is null (hasn't logged in), don't send the message
+                        if (!login.equals(worker.getLogin())) { // if the user in workerList is the login just used, don't send the message
+                            String msg2 = "\n" + worker.getLogin() + " is online" + "\n";
+                            send(msg2);
+                        }
+                    }
+                }
+
+                // send other online users current user's status
+                String onlineMsg = null;
+                for (ServerWorker worker : workerList) { // for each instance of worker in the workerList arraylist (everyone connected)
+                    if (!login.equals(worker.getLogin())) { // if the user in workerList is the login just used, don't send the message
+                        onlineMsg = "\n" + login + " is now online" + "\n";
+                        worker.send(onlineMsg);
+                    }
                 }
 
             } else {
@@ -92,7 +122,8 @@ public class ServerWorker extends Thread {
     }  // end of handleLogin method
 
     private void send(String msg) throws IOException {
-        outputStream.write(msg.getBytes());
+            outputStream.write(msg.getBytes());
+
 
     }
 } // end of ServerWorker class
