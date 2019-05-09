@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.HashSet;
 import java.util.List;
 
 public class ServerWorker extends Thread {
@@ -12,6 +13,9 @@ public class ServerWorker extends Thread {
     private String login = null;
     private final Server server;
     private OutputStream outputStream;
+
+    private HashSet<String> topicSet = new HashSet<>();
+
 
     public ServerWorker(Server server, Socket clientSocket) {
         this.server = server;
@@ -48,8 +52,14 @@ public class ServerWorker extends Thread {
                 if ("logoff".equalsIgnoreCase(cmd) || "quit".equalsIgnoreCase(line)) { // equalsIgnoreCase ignores casing--could be "QUIT", "qUiT", etc
                     handleLogoff();
                     break;
-                }else if ("login".equalsIgnoreCase(cmd)) {
+                } else if ("login".equalsIgnoreCase(cmd)) {
                     handleLogin(outputStream, tokens);
+                } else if ("msg".equalsIgnoreCase(cmd)) {
+                    handleMessage(tokens);
+                } else if ("join".equalsIgnoreCase(cmd)) {
+                    handleJoin(tokens);
+                } else if ("leave".equalsIgnoreCase(cmd)) {
+                    handleLeave(tokens);
                 } else {
                     String msg = "unknown " + cmd + "\n";
                     outputStream.write(msg.getBytes());
@@ -57,14 +67,17 @@ public class ServerWorker extends Thread {
                 }
             }
         }
+
         clientSocket.close();
     } // end of handleClientSocket method
+
 
     public String getLogin() {
         return login;
     }
 
     private void handleLogoff() throws IOException {
+        server.removeWorker(this); // remove this instance of serverWorker
 
         List<ServerWorker> workerList = server.getWorkerList();
 
@@ -81,12 +94,12 @@ public class ServerWorker extends Thread {
 
     private void handleLogin(OutputStream outputStream, String[] tokens) throws IOException {
         String msg;
-        if (tokens.length == 3) {
-            String login = tokens[1];
-            String password = tokens[2];
+        if (tokens.length == 3) { // make sure the command *login* has only 3 words
+            String login = tokens[1]; // set the second word to the username
+            String password = tokens[2]; // set the third word to the password
 
             if ( (login.equals("guest") && password.equals("guest"))
-                    || (login.equals("jim") && password.equals("jim")) ) {
+                    || (login.equals("jim") && password.equals("jim")) ) { // if the login is guest or jim
                 msg = "ok login\n";
                 outputStream.write(msg.getBytes());
                 this.login = login; // sets class login string to handleLogin's login value
@@ -97,7 +110,7 @@ public class ServerWorker extends Thread {
                 // send current user all other online people
                 for (ServerWorker worker : workerList) { // for each instance of worker in the workerList arraylist (everyone connected)
                     if (worker.getLogin() != null) { // if one of the users connected is null (hasn't logged in), don't send the message
-                        if (!login.equals(worker.getLogin())) { // if the user in workerList is the login just used, don't send the message
+                        if (!login.equals(worker.getLogin())) { // if a user in workerList matches the login just used, don't send the message
                             String msg2 = "\n" + worker.getLogin() + " is online" + "\n";
                             send(msg2);
                         }
@@ -122,8 +135,51 @@ public class ServerWorker extends Thread {
     }  // end of handleLogin method
 
     private void send(String msg) throws IOException {
-            outputStream.write(msg.getBytes());
+        outputStream.write(msg.getBytes());
+    }
 
+    // format: "msg" <user> text...
+    // alt format: "msg" <#topic> text...
+    private void handleMessage(String[] tokens) throws IOException {
+        String sendTo = tokens[1];
+        String body = "";
 
+        boolean isInTopic = sendTo.charAt(0) == '#';
+        for (int i = 2; i < tokens.length; i++) { // for every "word" in tokens
+            body = body.concat(" " + tokens[i]); // add the word to the message body
+        }
+
+        List<ServerWorker> workerList = server.getWorkerList();
+        for (ServerWorker worker : workerList) {
+            if (isInTopic) { // if the message is intended for a group chat
+                if (worker.isMemberOfTopic(sendTo)) { // if the worker is in that group chat
+                    String outMsg = "from " + login + ", in " + sendTo + ":" + body + "\n";
+                    worker.send(outMsg);
+                }
+            }
+            if (sendTo.equalsIgnoreCase(worker.getLogin())) {
+                String outMsg = "from " + login + ":" + body + "\n";
+                worker.send(outMsg);
+            }
+        }
+
+    }
+
+    public boolean isMemberOfTopic(String topic) {
+        return topicSet.contains(topic); // if the user is part of the "group chat", return true
+    }
+
+    private void handleJoin(String[] tokens) {
+        if (tokens.length > 1) {
+            String topic = tokens[1];
+            topicSet.add(topic);
+        }
+    }
+
+    private void handleLeave(String[] tokens) {
+        if (tokens.length > 1) {
+            String topic = tokens[1];
+            topicSet.remove(topic);
+        }
     }
 } // end of ServerWorker class

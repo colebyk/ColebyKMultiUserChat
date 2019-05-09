@@ -27,12 +27,16 @@ public class Server extends Thread {
                 System.out.println("About to accept client connection...");
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Accepted connection from " + clientSocket);
-                ServerWorker worker = new ServerWorker(this, clientSocket);
-                workerList.add(worker);
+                ServerWorker worker = new ServerWorker(this, clientSocket); // *this* refers to this Server object (this class itself)
+                workerList.add(worker); // add this user to
                 worker.start();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void removeWorker(ServerWorker serverWorker) {
+        workerList.remove(serverWorker); // remove the passed in instance of serverWorker from the workerList array list
     }
 }
