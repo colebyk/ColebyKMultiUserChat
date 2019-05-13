@@ -111,7 +111,7 @@ public class ServerWorker extends Thread {
                 for (ServerWorker worker : workerList) { // for each instance of worker in the workerList arraylist (everyone connected)
                     if (worker.getLogin() != null) { // if one of the users connected is null (hasn't logged in), don't send the message
                         if (!login.equals(worker.getLogin())) { // if a user in workerList matches the login just used, don't send the message
-                            String msg2 = "\n" + worker.getLogin() + " is online" + "\n";
+                            String msg2 = "online " + worker.getLogin() + "\n";
                             send(msg2);
                         }
                     }
@@ -121,7 +121,7 @@ public class ServerWorker extends Thread {
                 String onlineMsg = null;
                 for (ServerWorker worker : workerList) { // for each instance of worker in the workerList arraylist (everyone connected)
                     if (!login.equals(worker.getLogin())) { // if the user in workerList is the login just used, don't send the message
-                        onlineMsg = "\n" + login + " is now online" + "\n";
+                        onlineMsg = "online " + login + "\n";
                         worker.send(onlineMsg);
                     }
                 }
@@ -157,7 +157,7 @@ public class ServerWorker extends Thread {
                     worker.send(outMsg);
                 }
             }
-            if (sendTo.equalsIgnoreCase(worker.getLogin())) {
+            if (sendTo.equalsIgnoreCase(worker.getLogin())) { // if the user enters a valid name of someone connected, send the message
                 String outMsg = "from " + login + ":" + body + "\n";
                 worker.send(outMsg);
             }
@@ -172,14 +172,14 @@ public class ServerWorker extends Thread {
     private void handleJoin(String[] tokens) {
         if (tokens.length > 1) {
             String topic = tokens[1];
-            topicSet.add(topic);
+            topicSet.add(topic); // add the group the user joined to the list of groups
         }
     }
 
     private void handleLeave(String[] tokens) {
         if (tokens.length > 1) {
             String topic = tokens[1];
-            topicSet.remove(topic);
+            topicSet.remove(topic); // remove a group the user has joined from the list of groups
         }
     }
 } // end of ServerWorker class

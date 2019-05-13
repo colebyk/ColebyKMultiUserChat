@@ -12,10 +12,20 @@ User & Server
 3. User --> User
 
     * direct messages
-    * broadcast messages
+    * broadcast messages / group messages
 
 
 Commands:
 
     login <user> <password>
     logoff
+
+    msg <user> text...
+    i.e. "msg jim Hello World"
+    "from guest: Hello World"
+
+    #topic <-- chat room / group chat
+    join <topic>
+    leave <topic>
+    msg <topic> text...
+    receive: from:  <user>, in <topic>:
