@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fd78c127-a164-419a-ae1c-419f9ba09b59" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatServer/src/com/muc/ServerWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/ChatServer/src/com/muc/ServerWorker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ChatServer/com/muc/ServerWorker.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChatServer/com/muc/ServerWorker.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ChatServer/com/muc/Use Cases.txt" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChatServer/com/muc/Use Cases.txt" afterDir="false" />
-    </list>
+    <list default="true" id="fd78c127-a164-419a-ae1c-419f9ba09b59" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,14 +49,15 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ChatClient/src/com/muc/ChatClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="722">
-              <caret line="136" column="71" lean-forward="true" selection-start-line="136" selection-start-column="71" selection-end-line="136" selection-end-column="71" />
+            <state relative-caret-position="663">
+              <caret line="127" column="9" lean-forward="true" selection-start-line="127" selection-start-column="9" selection-end-line="127" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1960#2075#0" expanded="true" />
                 <element signature="e#2074#2075#0" expanded="true" />
                 <element signature="e#3683#3684#0" expanded="true" />
                 <element signature="e#3732#3733#0" expanded="true" />
+                <element signature="e#3805#3806#0" expanded="true" />
                 <element signature="e#3857#3858#0" expanded="true" />
               </folding>
             </state>
@@ -120,9 +116,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="26" />
-    <option name="width" value="1390" />
-    <option name="height" value="998" />
+    <option name="x" value="445" />
+    <option name="width" value="1380" />
+    <option name="height" value="996" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -310,11 +306,19 @@
       <option name="project" value="LOCAL" />
       <updated>1557427934449</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added a chat client, currently broken">
+      <created>1557774351590</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1557774351590</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1920" height="1160" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18463181" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -325,7 +329,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4994664" visible="true" weight="0.23841698" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4994664" weight="0.23841698" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3996139" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -353,7 +357,8 @@
     <MESSAGE value="Added Server class, login capability, and message that notifies everyone logged in of new logins" />
     <MESSAGE value="Added method for handling logoff, handled redundancy in messages showing who's online" />
     <MESSAGE value="Added topics, the ability to join and leave topics, and direct message to other users" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added topics, the ability to join and leave topics, and direct message to other users" />
+    <MESSAGE value="Added a chat client, currently broken" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a chat client, currently broken" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ColebyKMultiUserChat$ServerMain.ic" NAME="ServerMain Coverage Results" MODIFIED="1557426254161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
@@ -443,14 +448,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ChatClient/src/com/muc/ChatClient.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="722">
-          <caret line="136" column="71" lean-forward="true" selection-start-line="136" selection-start-column="71" selection-end-line="136" selection-end-column="71" />
+        <state relative-caret-position="663">
+          <caret line="127" column="9" lean-forward="true" selection-start-line="127" selection-start-column="9" selection-end-line="127" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1960#2075#0" expanded="true" />
             <element signature="e#2074#2075#0" expanded="true" />
             <element signature="e#3683#3684#0" expanded="true" />
             <element signature="e#3732#3733#0" expanded="true" />
+            <element signature="e#3805#3806#0" expanded="true" />
             <element signature="e#3857#3858#0" expanded="true" />
           </folding>
         </state>
