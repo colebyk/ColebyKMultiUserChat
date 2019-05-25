@@ -28,7 +28,7 @@ public class Server extends Thread {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Accepted connection from " + clientSocket);
                 ServerWorker worker = new ServerWorker(this, clientSocket); // *this* refers to this Server object (this class itself)
-                workerList.add(worker); // add this user to
+                workerList.add(worker); // add this user to an arraylist of workers
                 worker.start();
             }
         } catch (IOException e) {

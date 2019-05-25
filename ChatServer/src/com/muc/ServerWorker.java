@@ -34,8 +34,8 @@ public class ServerWorker extends Thread {
     }
 
     public void handleClientSocket(Socket clientSocket) throws IOException, InterruptedException {
-        this.outputStream = clientSocket.getOutputStream();
         InputStream inputStream = clientSocket.getInputStream();
+        this.outputStream = clientSocket.getOutputStream();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
@@ -85,7 +85,7 @@ public class ServerWorker extends Thread {
         String onlineMsg = null;
         for (ServerWorker worker : workerList) { // for each instance of worker in the workerList arraylist (everyone connected)
             if (!login.equals(worker.getLogin())) { // if the user in workerList is the login just used, don't send the message
-                onlineMsg = "\n" + login + " is now offline" + "\n";
+                onlineMsg = "offline " + login + "\n";
                 worker.send(onlineMsg);
             }
         }
@@ -118,7 +118,7 @@ public class ServerWorker extends Thread {
                 }
 
                 // send other online users current user's status
-                String onlineMsg = null;
+                String onlineMsg;
                 for (ServerWorker worker : workerList) { // for each instance of worker in the workerList arraylist (everyone connected)
                     if (!login.equals(worker.getLogin())) { // if the user in workerList is the login just used, don't send the message
                         onlineMsg = "online " + login + "\n";
@@ -129,6 +129,7 @@ public class ServerWorker extends Thread {
             } else {
                 msg = "error in login\n";
                 outputStream.write(msg.getBytes());
+                System.err.println("Login failed for " + login);
             }
 
         }
@@ -158,7 +159,7 @@ public class ServerWorker extends Thread {
                 }
             }
             if (sendTo.equalsIgnoreCase(worker.getLogin())) { // if the user enters a valid name of someone connected, send the message
-                String outMsg = "from " + login + ":" + body + "\n";
+                String outMsg = "msg " + login + " " + body + "\n";
                 worker.send(outMsg);
             }
         }
