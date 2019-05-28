@@ -6,6 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+/**
+ * provides the login window part of the GUI
+ * builds a new user list pane if login is successful
+ */
 public class LoginWindow extends JFrame {
 
     private final ChatClient client;

@@ -6,6 +6,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
+/**
+ * provides the user list part of the GUI
+ * builds new message panes if a user is double clicked
+ */
 public class UserListPane extends JPanel implements UserStatusListener {
 
 

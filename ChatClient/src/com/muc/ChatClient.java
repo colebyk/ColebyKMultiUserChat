@@ -6,6 +6,10 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * ChatClient provides the backend for accessing the server, sending messages, etc using the ServerWorker methods
+ * runs in the IDE terminal
+ */
 public class ChatClient {
     private final int serverPort;
     private final String serverName;
@@ -22,6 +26,14 @@ public class ChatClient {
         this.serverPort = serverPort;
     }
 
+    /**
+     * create a new instance of ChatClient
+     * add a userStatusListener to the ChatClient instance to listen for new users connecting or disconnecting
+     * add a messageListener to listen for incoming messages
+     * try to connect to the server and log in
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         ChatClient client = new ChatClient("localhost", 8818);
         client.addUserStatusListener(new UserStatusListener() {
@@ -58,6 +70,12 @@ public class ChatClient {
         }
     }
 
+    /**
+     * send the passed in message
+     * @param sendTo
+     * @param msgBody
+     * @throws IOException
+     */
     public void msg(String sendTo, String msgBody) throws IOException {
         //serverOut.write("\n".getBytes());
         String cmd = "msg " + sendTo + " " + msgBody + "\n";
@@ -69,6 +87,13 @@ public class ChatClient {
         serverOut.write("logoff\n".getBytes());
     }
 
+    /**
+     * send a login request to the server
+     * @param login
+     * @param password
+     * @return true or false depending on if the login fails or succeeds
+     * @throws IOException
+     */
     public boolean login(String login, String password) throws IOException {
 
         String cmd = "login " + login + " " + password + "\n";
@@ -85,6 +110,9 @@ public class ChatClient {
 
     }
 
+    /**
+     * starts a new thread to read messages
+     */
     private void startMessageReader() {
         Thread t = new Thread() {
             @Override
@@ -95,6 +123,9 @@ public class ChatClient {
         t.start();
     }
 
+    /**
+     *
+     */
     private void readMessageLoop() {
         try {
             String line;

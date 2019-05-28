@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+/**
+ * provides the GUI for messaging other users
+ */
 public class MessagePane extends JPanel implements MessageListener {
 
     private final ChatClient client;

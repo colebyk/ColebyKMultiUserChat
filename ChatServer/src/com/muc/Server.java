@@ -6,6 +6,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * creates a new thread and socket for each connecting user
+ */
 public class Server extends Thread {
     private final int serverPort;
 
@@ -15,6 +18,9 @@ public class Server extends Thread {
         this.serverPort = serverPort;
     }
 
+    /**
+     * @return the list of users
+     */
     public List<ServerWorker> getWorkerList() {
         return workerList;
     }
@@ -36,6 +42,10 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * @param serverWorker
+     * remove a user from the arraylist of current connected users
+     */
     public void removeWorker(ServerWorker serverWorker) {
         workerList.remove(serverWorker); // remove the passed in instance of serverWorker from the workerList array list
     }

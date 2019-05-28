@@ -7,6 +7,10 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * provides the backend for ChatClient
+ * handles the sending of messages across the server, joining of groups, managing the list of users, etc.
+ */
 public class ServerWorker extends Thread {
 
     private final Socket clientSocket;
@@ -33,6 +37,12 @@ public class ServerWorker extends Thread {
         }
     }
 
+    /**
+     * reads input from the user and, depending on the command entered, calls respective methods
+     * @param clientSocket
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void handleClientSocket(Socket clientSocket) throws IOException, InterruptedException {
         InputStream inputStream = clientSocket.getInputStream();
         this.outputStream = clientSocket.getOutputStream();
@@ -71,11 +81,19 @@ public class ServerWorker extends Thread {
         clientSocket.close();
     } // end of handleClientSocket method
 
-
+    /**
+     *
+     * @return the current user's username
+     */
     public String getLogin() {
         return login;
     }
 
+    /**
+     * removes the user from the list of connected users
+     * send a notification to each connected user that the current user went offline
+     * @throws IOException
+     */
     private void handleLogoff() throws IOException {
         server.removeWorker(this); // remove this instance of serverWorker
 
@@ -92,6 +110,15 @@ public class ServerWorker extends Thread {
         clientSocket.close();
     }
 
+    /**
+     * checks if the entered login information is correct
+     * notifies each user that someone logged in
+     * gives the user logging in a list of everyone already connected
+     * prints an error message if login information is incorrect
+     * @param outputStream
+     * @param tokens
+     * @throws IOException
+     */
     private void handleLogin(OutputStream outputStream, String[] tokens) throws IOException {
         String msg;
         if (tokens.length == 3) { // make sure the command *login* has only 3 words
@@ -135,10 +162,22 @@ public class ServerWorker extends Thread {
         }
     }  // end of handleLogin method
 
+    /**
+     * handles sending a message to intended users
+     * @param msg
+     * @throws IOException
+     */
     private void send(String msg) throws IOException {
         outputStream.write(msg.getBytes());
     }
 
+    /**
+     * constructs the message based on passed in tokens
+     * checks if the message is directed towards a group chat
+     * sends the message to the correct user
+     * @param tokens
+     * @throws IOException
+     */
     // format: "msg" <user> text...
     // alt format: "msg" <#topic> text...
     private void handleMessage(String[] tokens) throws IOException {
@@ -166,10 +205,19 @@ public class ServerWorker extends Thread {
 
     }
 
+    /**
+     *
+     * @param topic
+     * @return true or false, depending on if a user is part of a certain group chat
+     */
     public boolean isMemberOfTopic(String topic) {
         return topicSet.contains(topic); // if the user is part of the "group chat", return true
     }
 
+    /**
+     * add the user to a group chat based on String[] tokens
+     * @param tokens
+     */
     private void handleJoin(String[] tokens) {
         if (tokens.length > 1) {
             String topic = tokens[1];
@@ -177,6 +225,10 @@ public class ServerWorker extends Thread {
         }
     }
 
+    /**
+     * remove the user from a group chat based on String[] tokens
+     * @param tokens
+     */
     private void handleLeave(String[] tokens) {
         if (tokens.length > 1) {
             String topic = tokens[1];
